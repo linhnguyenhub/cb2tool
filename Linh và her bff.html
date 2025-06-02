@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giải Phương Trình Bậc Hai</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: linear-gradient(135deg, #ffc0cb 0%, #ffe4e1 50%, #ffb6c1 100%);
+      color: purple;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      background-color: #fff0f5;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .inputs {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .inputs input {
+      flex: 1;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      width: 100%;
+      background-color: #800080;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #5a005a;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid purple;
+      background-color: #ffe6f0;
+      border-radius: 8px;
+      min-height: 40px;
+    }
+    .details {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px dashed purple;
+      background-color: #fff8fc;
+      border-radius: 8px;
+      display: none;
+      transition: all 0.3s ease-in-out;
+    }
+    .toggle-button {
+      margin-top: 10px;
+      background: none;
+      border: none;
+      color: #800080;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toggle-button .icon {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .toggle-button.expanded .icon {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Giải Phương Trình Bậc Hai</h2>
+    <p>Ví dụ: phương trình <strong>x² - 3x + 2 = 0</strong> có a = 1, b = -3, c = 2</p>
+    <div class="inputs">
+      <input type="number" id="a" placeholder="a">
+      <input type="number" id="b" placeholder="b">
+      <input type="number" id="c" placeholder="c">
+    </div>
+    <button onclick="solveQuadratic()">Giải</button>
+    <div class="result" id="result"></div>
+    <button class="toggle-button" id="toggleBtn" onclick="toggleExplanation()">
+      <span class="icon">▼</span>
+      <span>Bài giải chi tiết</span>
+    </button>
+    <div class="details" id="explanation"></div>
+  </div>
+
+  <script>
+    function solveQuadratic() {
+      const a = parseFloat(document.getElementById("a").value);
+      const b = parseFloat(document.getElementById("b").value);
+      const c = parseFloat(document.getElementById("c").value);
+      const result = document.getElementById("result");
+      const explanation = document.getElementById("explanation");
+
+      explanation.style.display = "none";
+      document.getElementById("toggleBtn").classList.remove("expanded");
+
+      if (isNaN(a) || isNaN(b) || isNaN(c)) {
+        result.textContent = "Vui lòng nhập đầy đủ a, b và c.";
+        explanation.textContent = "";
+        return;
+      }
+
+      if (a === 0) {
+        if (b === 0) {
+          result.textContent = c === 0 ? "Phương trình có vô số nghiệm." : "Phương trình vô nghiệm.";
+          explanation.textContent = c === 0 ? "Vì cả a, b, c đều bằng 0 nên mọi giá trị x đều thỏa mãn." : "Vì a và b đều bằng 0 nhưng c khác 0, nên phương trình vô nghiệm.";
+        } else {
+          const x = -c / b;
+          result.textContent = `Phương trình có 1 nghiệm: x = ${x}`;
+          explanation.textContent = `Phương trình trở thành b*x + c = 0, nên x = -c / b = ${x}`;
+        }
+        return;
+      }
+
+      const delta = b * b - 4 * a * c;
+
+      if (delta < 0) {
+        result.textContent = "Phương trình vô nghiệm.";
+        explanation.textContent = `Vì Δ = b² - 4ac = ${delta} < 0 nên phương trình vô nghiệm.`;
+      } else if (delta === 0) {
+        const x = -b / (2 * a);
+        result.textContent = `Phương trình có nghiệm kép: x = ${x}`;
+        explanation.textContent = `Δ = 0 nên phương trình có nghiệm kép: x = -b / (2a) = ${x}`;
+      } else {
+        const x1 = (-b + Math.sqrt(delta)) / (2 * a);
+        const x2 = (-b - Math.sqrt(delta)) / (2 * a);
+        result.textContent = `Phương trình có 2 nghiệm: x₁ = ${x1}, x₂ = ${x2}`;
+        explanation.textContent = `Δ = ${delta} > 0 nên phương trình có 2 nghiệm phân biệt:
+` +
+                                  `x₁ = (-b + √Δ) / (2a) = ${x1}
+` +
+                                  `x₂ = (-b - √Δ) / (2a) = ${x2}`;
+      }
+    }
+
+    function toggleExplanation() {
+      const explanation = document.getElementById("explanation");
+      const toggleBtn = document.getElementById("toggleBtn");
+      const isVisible = explanation.style.display === "block";
+      explanation.style.display = isVisible ? "none" : "block";
+      toggleBtn.classList.toggle("expanded", !isVisible);
+    }
+  </script>
+</body>
+</html>
